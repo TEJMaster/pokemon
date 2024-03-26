@@ -1,40 +1,39 @@
 #### Preamble ####
-# Purpose: Models... [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Date: 11 February 2023 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
+# Purpose: Models whether we guessed right, based on our confidence
+# Author: Terry Tu
+# Date: 26 March 2024
+# Contact: xiangyu.tu@utoronto.ca
 # License: MIT
-# Pre-requisites: [...UPDATE THIS...]
-# Any other information needed? [...UPDATE THIS...]
+# Pre-requisites: 02-data_cleaning.R
+# Any other information needed?
 
 
 #### Workspace setup ####
+library(arrow)
 library(tidyverse)
 library(rstanarm)
-library(arrow)
 
 #### Read data ####
-analysis_data <- read_parquet("data/analysis_data/analysis_data.parquet")
+analysis_data <- read_parquet(file = "data/analysis_data/analysis_data.parquet")
 
-set.seed(853)
-
-analysis_data <- 
-  ces2020 |> 
-  slice_sample(n = 1000)
+analysis_data |>
+  ggplot(aes(x = certainty, y = outcome)) +
+  geom_jitter(height = 0)
 
 
 ### Model data ####
 first_model <-
   stan_glm(
-    formula = voted_for ~ gender + education,
+    formula = outcome ~ certainty,
     data = analysis_data,
     family = binomial(link = "logit"),
     prior = normal(location = 0, scale = 2.5, autoscale = TRUE),
     prior_intercept = normal(location = 0, scale = 2.5, autoscale = TRUE),
+    prior_aux = exponential(rate = 1, autoscale = TRUE),
     seed = 853
   )
 
-prior_summary(first_model)
+summary(first_model)
 
 #### Save model ####
 saveRDS(

@@ -1,19 +1,19 @@
 #### Preamble ####
-# Purpose: Simulates... [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Date: 11 February 2023 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
+# Purpose: Simulates an analysis dataset about Pokemon level and weakness against fire
+# Author: Terry Tu
+# Date: 26 March 2024
+# Contact: xiangyu.tu@mail.utoronto.ca
 # License: MIT
-# Pre-requisites: [...UPDATE THIS...]
-# Any other information needed? [...UPDATE THIS...]
+# Pre-requisites: -
+# Any other information needed? -
 
 
 #### Workspace setup ####
 library(tidyverse)
-# [...UPDATE THIS...]
 
 #### Simulate data ####
-# [...ADD CODE HERE...]
-
-
-
+data <- 
+  tibble(
+    level = rnorm(n = 1000, mean = 100, sd = 10) |> floor(),
+    weakness = sample(x = c("fire", "not fire"), size = 1000, replace = TRUE)
+  )
